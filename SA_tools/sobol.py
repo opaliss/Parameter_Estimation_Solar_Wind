@@ -108,7 +108,8 @@ def estimator_main_effect(YA, YB, YC, N, A,  type_estimator):
     """
     if type_estimator == "jansen":
         """
-        Michiel J.W. Jansen. Analysis of variance designs for model output. Computer Physics Communications, 117(1):35–43, 1999. ISSN 0010-4655.
+        Michiel J.W. Jansen. Analysis of variance designs for model output. 
+        Computer Physics Communications, 117(1):35–43, 1999. ISSN 0010-4655.
         """
         #
         # ((2 * N) / (2 * N - 1) * (1 / N * YA.T @ YC -
@@ -216,11 +217,10 @@ def estimator_total_effect(YA, YB, YC, N, type_estimator="sobol"):
             numerator[ii] = (1 / N) * YB.T @ YC[:, ii] - f02
         return 1 - numerator / denominator
 
-    elif type_estimator == "owen":
+    elif type_estimator == "jansen":
         """unbaised
-        A. B. Owen, Variance components and generalized Sobol’ indices, SIAM/ASA Journal on Uncertainty
-        Quantification, 1 (2013), pp. 19–41, https://doi.org/10.1137/120876782, http://dx.doi.org/10.1137/
-        120876782, https://arxiv.org/abs/http://dx.doi.org/10.1137/120876782.
+        Michiel J.W. Jansen. Analysis of variance designs for model output. Computer Physics Communications,
+         117(1):35–43, 1999. ISSN 0010-4655.
         """
         T = np.zeros(np.shape(YC)[1])
         for ii in range(np.shape(YC)[1]):
