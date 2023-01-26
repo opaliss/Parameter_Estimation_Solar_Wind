@@ -88,7 +88,7 @@ def estimate_sobol(YA, YB, YC, A, type_estimator="janon"):
     :param YB: (ndarray) output of input sampled matrix B.
     :param YC: (ndarray) output of input sampled matrix C.
     :param A: (ndarray) samples of matrix A.
-    :param type_estimator: (str) type of estimator ("sobol", "owen", "janon", etc...)
+    :param type_estimator: (str) type of estimator ("sobol", "jansen", "janon", etc...)
     :return: (ndarray) S (main effect) size (d x 1), (ndarray) T (total effect) size (d x 1)
     """
     main_effect = estimator_main_effect(YA=YA, YB=YB, YC=YC, N=len(YA), A=A, type_estimator=type_estimator)
@@ -106,15 +106,20 @@ def estimator_main_effect(YA, YB, YC, N, A,  type_estimator):
     :param type_estimator: (str) type of estimator ("sobol", "owen", "saltelli", "janon", etc...)
     :return: (ndarray) sobol indices main effect, size (d x 1).
     """
-    if type_estimator == "owen":
+    if type_estimator == "jansen":
         """
-        A. B. Owen, Variance components and generalized Sobol’ indices, SIAM/ASA Journal on Uncertainty
-        Quantification, 1 (2013), pp. 19–41, https://doi.org/10.1137/120876782, http://dx.doi.org/10.1137/
-        120876782, https://arxiv.org/abs/http://dx.doi.org/10.1137/120876782.
+        Michiel J.W. Jansen. Analysis of variance designs for model output. Computer Physics Communications, 117(1):35–43, 1999. ISSN 0010-4655.
         """
-        return ((2 * N) / (2 * N - 1) * (1 / N * YA.T @ YC -
-                                         ((np.mean(YA) + np.mean(YB)) / 2) ** 2 +
-                                         (np.var(YA) + np.var(YB)) / (4 * N))) / np.var(YA, ddof=1)
+        #
+        # ((2 * N) / (2 * N - 1) * (1 / N * YA.T @ YC -
+        #                              ((np.mean(YA) + np.mean(YB)) / 2) ** 2 +
+        #                              (np.var(YA) + np.var(YB)) / (4 * N))) / np.var(YA, ddof=1)
+        S = np.zeros(np.shape(YC)[1])
+        for ii in range(np.shape(YC)[1]):
+            S[ii] = 1 - (1 / (2 * N) * np.sum((YA - YC[:, ii]) ** 2)) / np.var(np.r_[YA, YB], ddof=1)
+        return S
+
+
     elif type_estimator == "sobol":
         """
         A. Saltelli, Making best use of model evaluations to compute SA_tools indices, 
