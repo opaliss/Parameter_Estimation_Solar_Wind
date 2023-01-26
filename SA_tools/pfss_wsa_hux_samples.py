@@ -40,16 +40,16 @@ B_scaled = qmc.scale(sample=B,
 
 
 # save samples [A, B]
-np.save(file="../SA_results/CR2048/" + str(folder) + "/samples/A_sample_scaled_" + str(N), arr=A_scaled)
-np.save(file="../SA_results/CR2048/" + str(folder) + "/samples/B_sample_scaled_" + str(N), arr=B_scaled)
+np.save(file="../SA_results/CR2058/" + str(folder) + "/samples/A_sample_scaled_" + str(N), arr=A_scaled)
+np.save(file="../SA_results/CR2058/" + str(folder) + "/samples/B_sample_scaled_" + str(N), arr=B_scaled)
 
 # generate matrix C=[C1, C2, C3, ..., C11].
 C = generate_tensor_c(A=A_scaled, B=B_scaled, d=d)
-np.save(file="../SA_results/CR2048/" + str(folder) + "/samples/C_sample_scaled_" + str(N), arr=C)
+np.save(file="../SA_results/CR2058/" + str(folder) + "/samples/C_sample_scaled_" + str(N), arr=C)
 
 # generate matrix D=[D1, D2, D3, ..., D11].
 D = generate_tensor_d(A=A_scaled, B=B_scaled, d=d)
-np.save(file="../SA_results/CR2048/" + str(folder) + "/samples/D_sample_scaled_" + str(N), arr=D)
+np.save(file="../SA_results/CR2058/" + str(folder) + "/samples/D_sample_scaled_" + str(N), arr=D)
 
 fig, ax = plt.subplots(ncols=d-1, nrows=d-1, figsize=(30, 30))
 
@@ -90,5 +90,5 @@ ax[9, 0].set_ylabel(r"$r_{h}$ [$R_{S}$]")
 
 fig.suptitle("Random Samples N = " + str(N))
 plt.tight_layout()
-plt.savefig("figs/CR2408_random_samples_" + str(N) + ".png", dpi=500)
+#plt.savefig("figs/CR2408_random_samples_" + str(N) + ".png", dpi=500)
 plt.show()
