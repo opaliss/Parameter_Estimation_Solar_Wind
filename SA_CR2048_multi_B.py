@@ -77,11 +77,11 @@ if __name__ == "__main__":
     D = np.load("SA_results/CR" + str(CR) + "/" + str(folder) + "/samples/D_sample_scaled_10000.npy")
     # get number of samples (N=1000), and number of uncertain parameters (11)
     # N, d = np.shape(A)
-    N = 6000
+    N = 10000
     d = 11
 
     # number of iterations (i.e. samples)
-    N_iterate = np.arange(N)
+    N_iterate = np.arange(6000, N)
 
     cpu_count = 10
     with Pool(cpu_count) as pool:

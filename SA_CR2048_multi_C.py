@@ -75,26 +75,15 @@ if __name__ == "__main__":
     D = np.load("SA_results/CR" + str(CR) + "/" + str(folder) + "/samples/D_sample_scaled_10000.npy")
     # get number of samples (N=1000), and number of uncertain parameters (11)
     # N, d = np.shape(A)
-    N = 6000
+    N = 10000
     d = 11
 
     # number of iterations (i.e. samples)
-    N_iterate = np.arange(N)
+    N_iterate = np.arange(6000, N)
 
     # list of size [N, 3]
     print("cpu count = ", cpu_count())
 
-    # # list of size [N, 3]
-    # YA = pool.map(partial(run_chain_models_AB_samples, ACE_longitude_=ACE_longitude,
-    #                       ACE_latitude_=ACE_latitude, ACE_r_=ACE_r, ACE_vr_=ACE_vr,
-    #                       gong_map_=gong_map, A_val=A,
-    #                       QoI_="ALL", sample_id_="A",
-    #                       CR_=CR, folder_=folder), N_iterate, chuncksize=int(N/(cpu_count()-10)))
-    #
-    # # list of size [N, 3]
-    # YB = pool.map(partial(run_chain_models_AB_samples, ACE_longitude_=ACE_longitude, ACE_latitude_=ACE_latitude,
-    #                       ACE_r_=ACE_r, ACE_vr_=ACE_vr, gong_map_=gong_map, A_val=B, QoI_="ALL", sample_id_="B",
-    #                       CR_=CR, folder_=folder), N_iterate, chuncksize=int(N/(cpu_count()-10)))
     cpu_count = 40
     with Pool(cpu_count) as pool:
         # list of size [N, d, 3]
@@ -104,31 +93,5 @@ if __name__ == "__main__":
                               folder_=folder), N_iterate, chunksize=int(N / cpu_count))
     # close process when done.
     pool.close()
-    # # list of size [N, d, 3]
-    # used to compute second order indicies.
-    # YD = pool.map(partial(run_chain_models_CD_samples, d_val=d, ACE_longitude_=ACE_longitude,
-    #                       ACE_latitude_=ACE_latitude, ACE_r_=ACE_r, ACE_vr_=ACE_vr, gong_map_=gong_map,
-    #                       C_val=D, QoI_="ALL"), N_iterate)
 
-    # # convert from list to array
-    # YA = np.array(YA)
-    # YB = np.array(YB)
-    YC = np.array(YC)
-    # YD = np.array(YD)
 
-    # # save simulation_output results after full simulation_output.
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_RMSE/YA", arr=YA[:, 0])
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_MAE/YA", arr=YA[:, 1])
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_PCC/YA", arr=YA[:, 2])
-    #
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_RMSE/YB", arr=YB[:, 0])
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_MAE/YB", arr=YB[:, 1])
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_PCC/YB", arr=YB[:, 2])
-
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_RMSE/YC_multi", arr=YC[:, :, 0])
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_MAE/YC_multi", arr=YC[:, :, 1])
-    # np.save(file="SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_PCC/YC_multi", arr=YC[:, :, 2])
-
-    # np.save(file="SA_results/CR" + str(CR) + "/B/simulation_RMSE/YD", arr=YD[:, :, 0])
-    # np.save(file="SA_results/CR" + str(CR) + "/B/simulation_MAE/YD", arr=YD[:, :, 1])
-    # np.save(file="SA_results/CR" + str(CR) + "/B/simulation_PCC/YD", arr=YD[:, :, 2])
