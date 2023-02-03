@@ -12,17 +12,21 @@ import os
 # run chain model for samples in "A" and "B"
 def run_chain_models_AB_samples(idx, ACE_longitude_, ACE_latitude_, ACE_r_,
                                 ACE_vr_, gong_map_, A_val, QoI_, sample_id_, CR_, folder_):
-    return run_chain_of_models(ACE_longitude=ACE_longitude_,
-                               ACE_latitude=ACE_latitude_,
-                               ACE_r=ACE_r_,
-                               ACE_vr=ACE_vr_,
-                               gong_map=gong_map_,
-                               coefficients_vec=A_val[idx, :],
-                               QoI=QoI_,
-                               sample_id=sample_id_,
-                               id=str(idx),
-                               CR=CR_,
-                               folder=folder_)
+    dir_location = os.getcwd() + "/SA_results/CR" + \
+                   str(CR) + "/" + str(folder) + "/simulation_output/" + \
+                   str(sample_id_) + str(idx)
+    if not os.path.exists(dir_location):
+        return run_chain_of_models(ACE_longitude=ACE_longitude_,
+                                   ACE_latitude=ACE_latitude_,
+                                   ACE_r=ACE_r_,
+                                   ACE_vr=ACE_vr_,
+                                   gong_map=gong_map_,
+                                   coefficients_vec=A_val[idx, :],
+                                   QoI=QoI_,
+                                   sample_id=sample_id_,
+                                   id=str(idx),
+                                   CR=CR_,
+                                   folder=folder_)
 
 
 # run chain model for samples in "C" and "D"
@@ -75,16 +79,16 @@ if __name__ == "__main__":
     D = np.load("SA_results/CR" + str(CR) + "/" + str(folder) + "/samples/D_sample_scaled_10000.npy")
     # get number of samples (N=1000), and number of uncertain parameters (11)
     # N, d = np.shape(A)
-    N = 6000
+    N = 10000
     d = 11
 
     # number of iterations (i.e. samples)
-    N_iterate = np.arange(N)
+    N_iterate = np.arange(6000, N)
 
     # list of size [N, 3]
     print("cpu count = ", cpu_count())
 
-    cpu_count = 40
+    cpu_count = 20
     with Pool(cpu_count) as pool:
         # list of size [N, d, 3]
         YA = pool.map(partial(run_chain_models_AB_samples, ACE_longitude_=ACE_longitude,
@@ -94,4 +98,3 @@ if __name__ == "__main__":
                               CR_=CR, folder_=folder), N_iterate)
     # close process when done.
     pool.close()
-

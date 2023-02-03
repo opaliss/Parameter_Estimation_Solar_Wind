@@ -12,17 +12,21 @@ import os
 # run chain model for samples in "A" and "B"
 def run_chain_models_AB_samples(idx, ACE_longitude_, ACE_latitude_, ACE_r_,
                                 ACE_vr_, gong_map_, A_val, QoI_, sample_id_, CR_, folder_):
-    return run_chain_of_models(ACE_longitude=ACE_longitude_,
-                               ACE_latitude=ACE_latitude_,
-                               ACE_r=ACE_r_,
-                               ACE_vr=ACE_vr_,
-                               gong_map=gong_map_,
-                               coefficients_vec=A_val[idx, :],
-                               QoI=QoI_,
-                               sample_id=sample_id_,
-                               id=str(idx),
-                               CR=CR_,
-                               folder=folder_)
+    dir_location = os.getcwd() + "/SA_results/CR" + \
+                   str(CR) + "/" + str(folder) + "/simulation_output/" + \
+                   str(sample_id_) + str(idx)
+    if not os.path.exists(dir_location):
+        return run_chain_of_models(ACE_longitude=ACE_longitude_,
+                                   ACE_latitude=ACE_latitude_,
+                                   ACE_r=ACE_r_,
+                                   ACE_vr=ACE_vr_,
+                                   gong_map=gong_map_,
+                                   coefficients_vec=A_val[idx, :],
+                                   QoI=QoI_,
+                                   sample_id=sample_id_,
+                                   id=str(idx),
+                                   CR=CR_,
+                                   folder=folder_)
 
 
 # run chain model for samples in "C" and "D"
@@ -84,13 +88,12 @@ if __name__ == "__main__":
     # list of size [N, 3]
     print("cpu count = ", cpu_count())
 
-    cpu_count = 40
+    cpu_count = 20
     with Pool(cpu_count) as pool:
         # list of size [N, d, 3]
-        YC = pool.map(partial(run_chain_models_CD_samples, d_val=d, ACE_longitude_=ACE_longitude,
-                              ACE_latitude_=ACE_latitude, ACE_r_=ACE_r, ACE_vr_=ACE_vr, gong_map_=gong_map,
-                              C_val=C, QoI_="ALL", sample_id_="C", CR_=CR,
-                              folder_=folder), N_iterate, chunksize=int(N / cpu_count))
+        YA = pool.map(partial(run_chain_models_AB_samples, ACE_longitude_=ACE_longitude,
+                              ACE_latitude_=ACE_latitude, ACE_r_=ACE_r, ACE_vr_=ACE_vr,
+                              gong_map_=gong_map, A_val=B, QoI_="ALL", sample_id_="B",
+                              CR_=CR, folder_=folder), N_iterate)
     # close process when done.
     pool.close()
-
