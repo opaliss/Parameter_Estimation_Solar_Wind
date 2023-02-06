@@ -59,7 +59,7 @@ if __name__ == "__main__":
     ACE_longitude, ACE_latitude, ACE_r, ACE_vr, ACE_obstime = get_ace_date(start_time=start_time, end_time=end_time)
 
     # get gong synoptic map.
-    gong_map = sunpy.map.Map('GONG/CR' + str(CR) + '/mrmqs070704t1843c2058_000.fits.gz')
+    gong_map = sunpy.map.Map('GONG/CR' + str(CR) + '/cr2058.fits.gz')
     gong_map.meta["bunit"] = "gauss"
     gong_map.meta["DATE"] = str(ACE_obstime[-1])
     gong_map.meta["DATE_OBS"] = str(ACE_obstime[-1])

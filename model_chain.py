@@ -280,7 +280,7 @@ if __name__ == "__main__":
     # size [d, N, d]
     C = np.load("SA_results/CR" + str(CR) + "/" + str(folder) + "/samples/C_sample_scaled_10000.npy")
     # get gong synoptic map
-    gong_map = sunpy.map.Map('GONG/CR' + str(CR) + '/mrmqs061004t2131c2048_000.fits.gz')
+    gong_map = sunpy.map.Map('GONG/CR' + str(CR) + '/cr2048.fits.gz')
     gong_map.meta["bunit"] = u.gauss
 
     idx = 441
