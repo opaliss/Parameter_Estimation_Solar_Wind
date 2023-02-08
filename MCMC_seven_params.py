@@ -131,14 +131,44 @@ if __name__ == "__main__":
     p0 = [np.array(initial) + 1e-5 * (u_bounds - l_bounds) * np.random.randn(n_dim) for i in range(n_walkers)]
 
     filename = "MCMC_results/test.h5"
-    backend = emcee.backends.HDFBackend(filename, read_only=False)
-    backend.reset(n_walkers, n_dim)
+    backend = emcee.backends.HDFBackend(filename)
+    # If you want to restart from the last sample,
+    # you can just leave out the call to backends.HDFBackend.reset():
+    # backend.reset(n_walkers, n_dim)
 
-    cpu_count = 40
+    cpu_count = n_walkers
     with Pool(cpu_count) as pool:
         sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=n_dim, log_prob_fn=log_posterior,
                                         backend=backend, pool=pool)
         print("Running MCMC...")
-        # pos, prob, state = sampler.sample(initial_state=p0, iterations=n_samples, store=True, progress=True)
-        pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
-                                            progress=True, store=True)
+        # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
+        #                                     progress=True, store=True)
+        # maximum number of samples
+        max_n = 20000
+
+        # we will track how the average autocorrelation time estimate changes
+        index = 0
+        autocorr = np.empty(max_n)
+
+        # This will be useful to testing convergence
+        old_tau = np.inf
+
+        # now we will sample for up to max_n steps
+        for sample in sampler.sample(initial_state=p0, iterations=max_n, progress=True, store=True):
+            # only check convergence every 100 steps
+            if sampler.iteration % 100:
+                continue
+
+            # compute the autocorrelation time so far using tol=0 means that we'll
+            # always get an estimate even if it isn't trustworthy
+            tau = sampler.get_autocorr_time(tol=0)
+            autocorr[index] = np.mean(tau)
+            index += 1
+
+            # check convergence
+            converged = np.all(tau * 100 < sampler.iteration)
+            converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+            if converged:
+                break
+            old_tau = tau
+

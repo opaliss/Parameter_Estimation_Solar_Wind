@@ -15,6 +15,9 @@ import astropy
 import os
 import matplotlib.pyplot as plt
 from sunpy.sun import constants
+import time
+import random
+import line_profiler
 
 
 def convert_vector_to_dict(samples):
@@ -360,18 +363,5 @@ if __name__ == "__main__":
     idx = 441
     idx_d = 0
     coefficients = C[idx_d, idx, :]
-
-    stime = time.time()
-    run_chain_of_models(ACE_longitude=ACE_longitude,
-                        ACE_latitude=ACE_latitude,
-                        ACE_r=ACE_r,
-                        ACE_vr=ACE_vr,
-                        gong_map=gong_map,
-                        coefficients_vec=coefficients,
-                        QoI="RMSE",
-                        sample_id="C",
-                        id=str(idx) + "_" + str(idx_d),
-                        CR=CR,
-                        folder=folder)
-
-    print(time.time() - stime)
+    run_chain_of_models_mcmc(ACE_longitude=ACE_longitude, ACE_latitude=ACE_latitude, ACE_r=ACE_r,
+                             gong_map=gong_map, coefficients_vec=coefficients)
