@@ -14,10 +14,6 @@ from scipy.stats import pearsonr
 import astropy
 import os
 import matplotlib.pyplot as plt
-from sunpy.sun import constants
-import time
-import random
-import line_profiler
 
 
 def convert_vector_to_dict(samples):
