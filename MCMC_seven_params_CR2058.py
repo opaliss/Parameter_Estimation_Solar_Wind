@@ -10,7 +10,7 @@ import astropy.units as u
 
 # get data
 # exclude 2051 since there were 3 CMEs during this time period.
-list_of_carrington_rotations = [2048, 2049, 2050, 2052, 2053, 2054, 2055, 2056, 2057, 2058]
+list_of_carrington_rotations = [2058]
 num_cr = len(list_of_carrington_rotations)
 ACE_longitude = []
 ACE_latitude = []
@@ -116,28 +116,24 @@ def log_posterior(theta):
 
 
 if __name__ == "__main__":
-    # initialization (taken from the notebook)
-    # initial = np.array([3.16435228e+00, 3.49519082e+02,
-    #                     7.23709870e+02, 1.77866287e-01,
-    #                     1.14697740e+00, 2.46571473e-02, 6.01763647e-01])
     n_walkers = 15
-
-    filename = "MCMC_results/test.h5"
+    filename = "MCMC_results/CR2058.h5"
     backend = emcee.backends.HDFBackend(filename)
-    initial = backend.get_chain(flat=False)[-1, :, :]
+    reader = emcee.backends.HDFBackend(filename)
+    initial = reader.get_chain(flat=False)[-1, :, :]
+
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
     # backend.reset(n_walkers, n_dim)
 
     # cpu_count = n_walkers
     # with Pool(cpu_count) as pool:
-    sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=7, log_prob_fn=log_posterior,
-                                    backend=backend)
+    sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=7, log_prob_fn=log_posterior, backend=backend)
     print("Running MCMC...")
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = 20000
+    max_n = int(1e5)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0
@@ -162,7 +158,6 @@ if __name__ == "__main__":
         converged = np.all(tau * 100 < sampler.iteration)
         converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
         if converged:
-            print("yay converged based on autocorrelation!!!!!")
             break
         old_tau = tau
 

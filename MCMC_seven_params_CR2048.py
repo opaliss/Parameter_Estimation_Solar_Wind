@@ -8,8 +8,8 @@ import sunpy.map
 import astropy.units as u
 
 
-# get data
-# exclude 2051 since there were 3 CMEs during this time period.
+# global variable for multiprocessing purposes!
+# get data for CR2048.
 list_of_carrington_rotations = [2048]
 num_cr = len(list_of_carrington_rotations)
 ACE_longitude = []
@@ -30,7 +30,7 @@ for cr in list_of_carrington_rotations:
     ACE_vr.append(result[3])
     ACE_obstime.append(result[4])
 
-    # get gong synoptic maps
+    # get gong synoptic maps from GONG folder (saved as fits)
     gong = sunpy.map.Map('GONG/CR' + str(cr) + '/cr' + str(cr) + '.fits.gz')
     gong.meta["bunit"] = u.gauss
     gong.meta["DATE"] = str(result[4][-1])
@@ -39,14 +39,15 @@ for cr in list_of_carrington_rotations:
 
 
 def model(theta):
-    """The model evaluation used in MCMC for obtaining the radial velocity of 10 CRs.
+    """The model evaluation used in MCMC for obtaining the radial velocity at L1.
 
     :param theta: list of model parameters.
     :return: list of radial velocity results.
     """
     # the parameters are stored as a vector of values, so unpack them
     r_ss, v0, v1, alpha, beta, w, gamma = theta
-    # full list of parameters used in the chain of models, the last four are non-influential.
+    # full list of parameters used in the chain of models, the last four are non-influential
+    # so we fix them to their nominal values.
     coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 3, 3.5, 0.15, 50]
     # vr initialization
     vr = []
@@ -71,8 +72,10 @@ def log_prior(theta):
     # we are using only uniform priors
     if 1.5 <= r_ss <= 4. and 200. <= v0 <= 400. and 550. <= v1 <= 950. and \
             0.05 <= alpha <= 0.5 and 1. <= beta <= 1.75 and 0.01 <= w <= 0.4 and 0.06 <= gamma <= 0.9:
+        # return a finite value (does not matter what it is)
         return 0.
     else:
+        # outside of the box (volume).
         return -np.inf
 
 
@@ -93,7 +96,7 @@ def log_likelihood(theta, sigma_scale=1):
         ACE_vr_is_nan = np.isnan(ACE_vr[jj])
         data_model_diff = (ACE_vr[jj][~ACE_vr_is_nan]).to(u.km/u.s).value - model_eval[jj][~ACE_vr_is_nan]
         if sigma_scale == 1:
-            # note for scaling issues I am not squaring the error.
+            # if Sigma = I then the log-likelihood simplifies.
             ll += - 0.5 * np.linalg.norm(data_model_diff, ord=2) ** 2
         else:
             sigma_inv = np.diag(np.ones(len(data_model_diff))) * sigma_scale
@@ -117,28 +120,23 @@ def log_posterior(theta):
 
 if __name__ == "__main__":
     # initialization (taken from the notebook)
-    initial = np.array([3.16435228e+00, 3.49519082e+02,
-                        7.23709870e+02, 1.77866287e-01,
-                        1.14697740e+00, 2.46571473e-02, 6.01763647e-01])
-
-    l_bounds = np.array([1.5, 200, 550, 0.05, 1, 0.01, 0.06])
-    u_bounds = np.array([4, 400, 950, 0.5, 1.75, 0.4, 0.9])
-
+    # initial = np.array([3.16435228e+00, 3.49519082e+02,
+    #                     7.23709870e+02, 1.77866287e-01,
+    #                     1.14697740e+00, 2.46571473e-02, 6.01763647e-01])
     n_walkers = 15
-    n_samples = 200
-    n_dim = len(initial)
-    n_crs = len(list_of_carrington_rotations)
-    p0 = [np.array(initial) + 1e-5 * (u_bounds - l_bounds) * np.random.randn(n_dim) for i in range(n_walkers)]
 
     filename = "MCMC_results/CR2048.h5"
     backend = emcee.backends.HDFBackend(filename)
+    # get the previous run last sample.
+    initial = backend.get_chain(flat=False)[-1, :, :]
+
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
-    backend.reset(n_walkers, n_dim)
+    # backend.reset(n_walkers, n_dim)
 
     # cpu_count = n_walkers
     # with Pool(cpu_count) as pool:
-    sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=n_dim, log_prob_fn=log_posterior, backend=backend)
+    sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=7, log_prob_fn=log_posterior, backend=backend)
     print("Running MCMC...")
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
@@ -153,7 +151,7 @@ if __name__ == "__main__":
     old_tau = np.inf
 
     # now we will sample for up to max_n steps
-    for sample in sampler.sample(initial_state=p0, iterations=max_n, progress=True, store=True):
+    for sample in sampler.sample(initial_state=initial, iterations=max_n, progress=True, store=True):
         # only check convergence every 100 steps
         if sampler.iteration % 100:
             continue
