@@ -141,7 +141,7 @@ if __name__ == "__main__":
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = int(1e5)
+    max_n = int(400)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0

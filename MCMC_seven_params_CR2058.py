@@ -119,8 +119,7 @@ if __name__ == "__main__":
     n_walkers = 15
     filename = "MCMC_results/CR2058.h5"
     backend = emcee.backends.HDFBackend(filename)
-    reader = emcee.backends.HDFBackend(filename)
-    initial = reader.get_chain(flat=False)[-1, :, :]
+    initial = backend.get_chain(flat=False)[-1, :, :]
 
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
@@ -133,7 +132,7 @@ if __name__ == "__main__":
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = int(1e5)
+    max_n = int(300)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0

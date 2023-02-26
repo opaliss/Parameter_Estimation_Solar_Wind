@@ -70,7 +70,8 @@ def log_prior(theta):
     r_ss, v0, v1, alpha, beta, w, gamma = theta
     # we are using only uniform priors
     if 1.5 <= r_ss <= 4. and 200. <= v0 <= 400. and 550. <= v1 <= 950. and \
-            0.05 <= alpha <= 0.5 and 1. <= beta <= 1.75 and 0.01 <= w <= 0.4 and 0.06 <= gamma <= 0.9:
+            0.05 <= alpha <= 0.5 and 1. <= beta <= 1.75 and 0.01 <= w <= 0.4 \
+            and 0.06 <= gamma <= 0.9:
         return 0.
     else:
         return -np.inf
@@ -128,8 +129,7 @@ if __name__ == "__main__":
 
     filename = "MCMC_results/CR2053.h5"
     backend = emcee.backends.HDFBackend(filename)
-    reader = emcee.backends.HDFBackend(filename)
-    initial = reader.get_chain(flat=False)[-1, :, :]
+    initial = backend.get_chain(flat=False)[-1, :, :]
 
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = int(1e5)
+    max_n = int(200)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0

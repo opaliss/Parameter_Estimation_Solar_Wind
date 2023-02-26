@@ -5,6 +5,8 @@ from multiprocessing import Pool
 from model_chain import run_chain_of_models_mcmc, get_ace_date
 from sunpy.coordinates.sun import carrington_rotation_time
 import sunpy.map
+import warnings
+warnings.filterwarnings("ignore")
 import astropy.units as u
 
 
@@ -137,7 +139,7 @@ if __name__ == "__main__":
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = 20000
+    max_n = 200
 
     # we will track how the average autocorrelation time estimate changes
     index = 0
