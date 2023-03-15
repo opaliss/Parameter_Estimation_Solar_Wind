@@ -49,7 +49,7 @@ def model(theta):
     # the parameters are stored as a vector of values, so unpack them
     r_ss, v0, v1, alpha, beta, w, gamma = theta
     # full list of parameters used in the chain of models, the last four are non-influential.
-    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 3, 3.5, 0.15, 50]
+    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 1.75, 3.5, 0.15, 50]
     # vr initialization
     vr = []
 
@@ -78,7 +78,7 @@ def log_prior(theta):
         return -np.inf
 
 
-def log_likelihood(theta, sigma_scale=1):
+def log_likelihood(theta, sigma_scale=10):
     """returns the log likelihood for the specific set of parameters theta.
 
     :param theta: list of model parameters.
@@ -134,12 +134,12 @@ if __name__ == "__main__":
     # cpu_count = n_walkers
     # with Pool(cpu_count) as pool:
     sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=7, log_prob_fn=log_posterior,
-                                    backend=backend)
+                                    backend=backend, moves=emcee.moves.StretchMove(a=2))
     print("Running MCMC...")
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = 200
+    max_n = int(2000)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         converged = np.all(tau * 100 < sampler.iteration)
         converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
         if converged:
-            print("yay converged based on autocorrelation!!!!!")
+            print("yay, converged based on autocorrelation!!!!!")
             break
         old_tau = tau
 
