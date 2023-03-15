@@ -81,12 +81,7 @@ def log_likelihood(theta, sigma_scale=10):
     # find indexes where the measurements are nan.
     ACE_vr_is_nan = np.isnan(ACE_vr)
     data_model_diff = (ACE_vr[~ACE_vr_is_nan]).to(u.km / u.s).value - model_eval[~ACE_vr_is_nan]
-    if sigma_scale == 1:
-        # if Sigma = I then the log-likelihood simplifies.
-        ll = - 0.5 * np.linalg.norm(data_model_diff, ord=2) ** 2
-    else:
-        sigma_inv = np.diag(np.ones(len(data_model_diff))) * (1/sigma_scale)
-        ll = - 0.5 * data_model_diff.T @ sigma_inv @ data_model_diff
+    ll = - 0.5 * (1./sigma_scale) * (np.linalg.norm(data_model_diff, ord=2) ** 2)
     return ll
 
 
