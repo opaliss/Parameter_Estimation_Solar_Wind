@@ -42,7 +42,7 @@ def model(theta):
     r_ss, v0, v1, alpha, beta, w, gamma = theta
     # full list of parameters used in the chain of models, the last four are non-influential
     # so we fix them to their nominal values.
-    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 1.75, 3.5, 0.15, 50]
+    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 1.75, 3, 0.15, 50]
     return run_chain_of_models_mcmc(ACE_longitude=ACE_longitude,
                                     ACE_latitude=ACE_latitude,
                                     ACE_r=ACE_r,
@@ -117,8 +117,8 @@ if __name__ == "__main__":
     filename = "MCMC_results/CR" + str(cr) + ".h5"
     backend = emcee.backends.HDFBackend(filename)
     # get the previous run last sample.
-    backend_original = emcee.backends.HDFBackend("MCMC_results/test.h5")
-    initial = backend_original.get_chain(flat=False)[-1, :, :]
+    # backend_original = emcee.backends.HDFBackend("MCMC_results/test.h5")
+    initial = backend.get_chain(flat=False)[-1, :, :]
 
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():

@@ -42,7 +42,7 @@ def model(theta):
     r_ss, v0, v1, alpha, beta, w, gamma = theta
     # full list of parameters used in the chain of models, the last four are non-influential
     # so we fix them to their nominal values.
-    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 1.75, 3.5, 0.15, 50]
+    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 1.75, 3, 0.15, 50]
     return run_chain_of_models_mcmc(ACE_longitude=ACE_longitude,
                                     ACE_latitude=ACE_latitude,
                                     ACE_r=ACE_r,

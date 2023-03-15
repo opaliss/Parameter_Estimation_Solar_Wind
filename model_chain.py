@@ -30,10 +30,10 @@ def convert_vector_to_dict(samples):
             "beta": samples[4],
             "w": samples[5],
             "gamma": samples[6],
-            "delta": samples[7],
-            "psi": samples[8],
-            "alpha_acc": samples[9],
-            "rh": samples[10]}
+            "delta": samples[7],  # nominal value is 1.75
+            "psi": samples[8],  # nominal value is 3
+            "alpha_acc": samples[9],  # nominal value is 0.15
+            "rh": samples[10]}  # nominal value is 50
 
 
 def get_ace_date(start_time, end_time):
