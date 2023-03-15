@@ -85,7 +85,7 @@ def log_likelihood(theta, sigma_scale=10):
         # if Sigma = I then the log-likelihood simplifies.
         ll = - 0.5 * np.linalg.norm(data_model_diff, ord=2) ** 2
     else:
-        sigma_inv = np.diag(np.ones(len(data_model_diff))) * sigma_scale
+        sigma_inv = np.diag(np.ones(len(data_model_diff))) * (1/sigma_scale)
         ll = - 0.5 * data_model_diff.T @ sigma_inv @ data_model_diff
     return ll
 
