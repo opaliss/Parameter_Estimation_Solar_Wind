@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
-    backend.reset(n_walkers, n_dim)
+    # backend.reset(n_walkers, n_dim)
 
     # cpu_count = n_walkers
     # with Pool(cpu_count) as pool:
