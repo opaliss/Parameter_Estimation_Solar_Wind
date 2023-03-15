@@ -25,9 +25,9 @@ A = sample[:N, :]
 B = sample[N:, :]
 
 # lower and upper bounds
-#          r_ss  v0.   v1. alpha beta w  gamma  delta     psi        acc     rh
+#          r_ss  v0.   v1.   alpha   beta   w  gamma delta  psi    acc     rh
 l_bounds = [1.5, 200,   550,  0.05,   1,   0.01, 0.06,    1,  3,     0,    30]
-u_bounds = [4,   400,   950,   0.5, 1.75, 0.4,  0.9,      5,  4,     0.5,  60]
+u_bounds = [4,   400,   950,   0.5, 1.75,  0.4,  0.9,     5,  4,    0.5,  60]
 
 # scale and sample
 A_scaled = qmc.scale(sample=A,
