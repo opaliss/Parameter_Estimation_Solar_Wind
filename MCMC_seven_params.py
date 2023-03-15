@@ -49,7 +49,7 @@ def model(theta):
     # the parameters are stored as a vector of values, so unpack them
     r_ss, v0, v1, alpha, beta, w, gamma = theta
     # full list of parameters used in the chain of models, the last four are non-influential.
-    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 1.75, 3.5, 0.15, 50]
+    coefficients_vec = [r_ss, v0, v1, alpha, beta, w, gamma, 1.75, 3, 0.15, 50]
     # vr initialization
     vr = []
 
@@ -122,7 +122,10 @@ if __name__ == "__main__":
     # initial = np.array([3.16435228e+00, 3.49519082e+02,
     #                     7.23709870e+02, 1.77866287e-01,
     #                     1.14697740e+00, 2.46571473e-02, 6.01763647e-01])
+    # number of walkers
     n_walkers = 15
+    # number of parameter dimensions
+    n_dim = 7
 
     filename = "MCMC_results/test.h5"
     backend = emcee.backends.HDFBackend(filename)
@@ -133,7 +136,7 @@ if __name__ == "__main__":
 
     # cpu_count = n_walkers
     # with Pool(cpu_count) as pool:
-    sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=7, log_prob_fn=log_posterior,
+    sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=n_dim, log_prob_fn=log_posterior,
                                     backend=backend, moves=emcee.moves.StretchMove(a=2))
     print("Running MCMC...")
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
