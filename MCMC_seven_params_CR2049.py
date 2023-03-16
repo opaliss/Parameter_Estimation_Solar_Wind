@@ -112,7 +112,7 @@ if __name__ == "__main__":
     filename = "MCMC_results/CR" + str(cr) + ".h5"
     backend = emcee.backends.HDFBackend(filename)
     # # get the previous run last sample.
-    # backend_original = emcee.backends.HDFBackend("MCMC_results/test.h5")
+    # backend_original = emcee.backends.HDFBackend("MCMC_results/CR_total.h5")
     initial = backend.get_chain(flat=False)[-1, :, :]
 
     # If you want to restart from the last sample,

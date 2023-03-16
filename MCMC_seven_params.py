@@ -94,12 +94,7 @@ def log_likelihood(theta, sigma_scale=10):
         # find indexes where the measurements are nan.
         ACE_vr_is_nan = np.isnan(ACE_vr[jj])
         data_model_diff = (ACE_vr[jj][~ACE_vr_is_nan]).to(u.km/u.s).value - model_eval[jj][~ACE_vr_is_nan]
-        if sigma_scale == 1:
-            # note for scaling issues I am not squaring the error.
-            ll += - 0.5 * np.linalg.norm(data_model_diff, ord=2) ** 2
-        else:
-            sigma_inv = np.diag(np.ones(len(data_model_diff))) * sigma_scale
-            ll += - 0.5 * data_model_diff.T @ sigma_inv @ data_model_diff
+        ll += - 0.5 * (1. / sigma_scale) * (np.linalg.norm(data_model_diff, ord=2) ** 2)
     return ll
 
 
@@ -127,7 +122,7 @@ if __name__ == "__main__":
     # number of parameter dimensions
     n_dim = 7
 
-    filename = "MCMC_results/test.h5"
+    filename = "MCMC_results/CR_total.h5"
     backend = emcee.backends.HDFBackend(filename)
     initial = backend.get_chain(flat=False)[-1, :, :]
     # If you want to restart from the last sample,
@@ -142,7 +137,7 @@ if __name__ == "__main__":
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = int(2000)
+    max_n = int(200)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0

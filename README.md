@@ -1,4 +1,4 @@
-# Global Sensitivity Analysis of the Ambient Solar Wind via an Operational Model Chain
+# Global Sensitivity Analysis and Bayesian Inference of the Ambient Solar Wind via an Operational Model Chain
 
 Global Sensitivity Analysis of the parameters in PFSS => WSA => HUX model chain using ACE measurement velocity data. 
 
@@ -18,6 +18,7 @@ Global Sensitivity Analysis of the parameters in PFSS => WSA => HUX model chain 
 13. streamtracer >= 1.2.0
 14. multiprocess >= 0.70.14
 15. requests >= 2.28.1
+16. emcee >= 3.1.4
 
 
 # Data
