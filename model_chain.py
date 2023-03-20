@@ -72,7 +72,7 @@ def get_ace_date(start_time, end_time):
     return ACE_longitude, ACE_latitude, ACE_r, np.abs(ACE.quantity('V_GSE_0')), ACE.time
 
 
-def pfss2flines(pfsspy_out, nth=180, nph=360, trace_from_SS=False, max_steps=1000):
+def pfss2flines(pfsspy_out, nth=180, nph=360, trace_from_SS=False, max_steps=1000, r_ss=2.5):
     """Field line tracing from photosphere or source surface.
 
     :param pfsspy_out: pfsspy output object
@@ -88,7 +88,7 @@ def pfss2flines(pfsspy_out, nth=180, nph=360, trace_from_SS=False, max_steps=100
         alt = 1 * u.R_sun
     else:
         # trace down from solar surface
-        alt = 2.5 * u.R_sun
+        alt = r_ss * u.R_sun
     # get all tuples of the coordinates.
     alt = [alt] * len(lons.ravel())
     # create an astropy seed in HG coordinates.
@@ -271,6 +271,78 @@ def run_chain_of_models_mcmc(ACE_longitude,
                              n_r_hux=300,
                              n_theta_ch=180,
                              n_phi_ch=360):
+    """functionality to run a chain of empirical and reduced-physics models:
+
+                                [PFSS] -----> [WSA] -----> [HUX]
+
+    :param ACE_r: ACE simulation_output distance from the Sun.
+    :param ACE_latitude: ACE simulation_output latitude [-90, 90] in degrees.
+    :param ACE_longitude: ACE simulation_output longitude [0, 360] in degrees.
+    :param n_phi_ch: number of phi mesh grid points in tracing coronal hole maps.
+    :param n_theta_ch: number of theta mesh grid points in tracing coronal hole maps.
+    :param n_r_hux: number of radial mesh grid points in the HUX finite difference uniform mesh.
+    :param coefficients_vec: 11 parameters of PSS, WSA, and HUX.
+    :param n_r_pfss: number of radial cells in finite differencing in PFSS.
+    :param gong_map: SunPy Map object.
+    :return: QoI evaluated for a specific CR. (float)
+    """
+    # convert coefficients to dictionary for readability.
+    coeff = convert_vector_to_dict(samples=coefficients_vec)
+
+    # PFSS parameters + simulate.
+    pfss_in = pfsspy.Input(br=gong_map, nr=n_r_pfss, rss=coeff["r_ss"])
+    pfss_out = pfsspy.pfss(input=pfss_in)
+
+    # trace the magnetic field lines for the ACE projection to obtain the magnetic expansion factor.
+    tracer = tracing.FortranTracer()
+    seeds = SkyCoord(ACE_longitude.to(u.rad),
+                     ACE_latitude.to(u.rad),
+                     coeff["r_ss"] * const.R_sun,
+                     frame=pfss_out.coordinate_frame)
+    field_lines_fp = tracer.trace(seeds=seeds, output=pfss_out)
+    fp_ace_traj = field_lines_fp.expansion_factors
+
+    # coronal hole mapping
+    topologies = pfss2flines(pfsspy_out=pfss_out, nth=n_theta_ch, nph=n_phi_ch)
+    d_ace_traj = distance_to_coronal_hole_boundary(topologies=topologies, field_lines_fp=field_lines_fp)
+
+    # WSA empirical model.
+    v_wsa = wsa(fp=fp_ace_traj, d=d_ace_traj, coeff=coeff)
+
+    # define HUX grid.
+    r_hux = (np.linspace(coeff["r_ss"], np.max(ACE_r.to(u.solRad)).value, n_r_hux) * u.solRad).to(u.km).value
+    p_hux = np.linspace(0, 2 * np.pi, len(ACE_longitude))
+
+    # interpolate WSA velocity results on HUX grid.
+    v_wsa_interp = interpolate_ace_data(x=p_hux, xp=ACE_longitude.to(u.rad).value, fp=v_wsa, period=2 * np.pi)
+
+    # simulate HUX for the entire grid [phi, r].
+    vr_hux_wsa = apply_hux_f_model(initial_condition=v_wsa_interp,
+                                   dr_vec=r_hux[1:] - r_hux[:-1],
+                                   dp_vec=p_hux[1:] - p_hux[:-1],
+                                   alpha=coeff["alpha_acc"],
+                                   rh=coeff["rh"],
+                                   r0=coeff["r_ss"],
+                                   theta=np.mean(np.pi / 2 - ACE_latitude.to(u.rad).value))
+
+    # interpolate back to ACE longitude and radial trajectory..
+    vr_hux_wsa_interp = interp_2d_ace_hux(p_hux=p_hux,
+                                          r_hux=r_hux,
+                                          vr_hux=vr_hux_wsa,
+                                          ACE_r=ACE_r,
+                                          ACE_longitude=ACE_longitude)
+    return vr_hux_wsa_interp
+
+
+def run_chain_of_models_mcmc_without_pfss(ACE_longitude,
+                                         ACE_latitude,
+                                         ACE_r,
+                                         gong_map,
+                                         coefficients_vec,
+                                         n_r_pfss=100,
+                                         n_r_hux=300,
+                                         n_theta_ch=180,
+                                         n_phi_ch=360):
     """functionality to run a chain of empirical and reduced-physics models:
 
                                 [PFSS] -----> [WSA] -----> [HUX]
