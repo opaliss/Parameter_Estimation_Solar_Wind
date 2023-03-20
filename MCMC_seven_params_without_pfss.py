@@ -116,7 +116,7 @@ if __name__ == "__main__":
     # initialization
     # lower bound for parameters
     #                    v1,  alpha, beta, w, gamma
-    l_bounds = np.array([550, 0.05, 1, 0.01, 0.06])
+    l_bounds = np.array([550, 0.05, 1., 0.01, 0.06])
     # upper bound for parameters
     #                    v1,  alpha, beta, w, gamma
     u_bounds = np.array([950, 0.5, 1.75, 0.4, 0.9])
@@ -132,13 +132,13 @@ if __name__ == "__main__":
     backend = emcee.backends.HDFBackend(filename)
 
     # after the first run we can uncomment the initialization
-    # initial = backend.get_chain(flat=False)[-1, :, :]
-    initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
-                                                      cov=np.diag(u_bounds - l_bounds) * 1e-2,
-                                                      size=n_walkers)
-    # If you want to restart from the last sample,
+    initial = backend.get_chain(flat=False)[-1, :, :]
+    # initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
+    #                                                   cov=np.diag(u_bounds - l_bounds) * 1e-2,
+    #                                                   size=n_walkers)
+    # # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
-    backend.reset(n_walkers, n_dim)
+    # backend.reset(n_walkers, n_dim)
 
     # cpu_count = n_walkers
     # with Pool(cpu_count) as pool:

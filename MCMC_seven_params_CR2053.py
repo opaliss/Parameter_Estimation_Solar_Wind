@@ -114,10 +114,10 @@ if __name__ == "__main__":
     backend = emcee.backends.HDFBackend(filename)
     # get the previous run last sample.
     # backend_original = emcee.backends.HDFBackend("MCMC_results/CR_total.h5")
-    # initial = backend.get_chain(flat=False)[-1, :, :]
-    initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
-                                                      cov=np.diag(u_bounds - l_bounds) * 1e-2,
-                                                      size=n_walkers)
+    initial = backend.get_chain(flat=False)[-1, :, :]
+    # initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
+    #                                                   cov=np.diag(u_bounds - l_bounds) * 1e-2,
+    #                                                   size=n_walkers)
 
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
