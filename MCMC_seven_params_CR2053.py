@@ -23,7 +23,6 @@ ACE_r = result[2]
 ACE_vr = result[3]
 ACE_obstime = result[4]
 
-
 # get gong synoptic maps from GONG folder (saved as fits)
 gong = sunpy.map.Map('GONG/CR' + str(cr) + '/cr' + str(cr) + '.fits.gz')
 gong.meta["bunit"] = u.gauss
@@ -81,8 +80,7 @@ def log_likelihood(theta, sigma_scale=10):
     # find indexes where the measurements are nan.
     ACE_vr_is_nan = np.isnan(ACE_vr)
     data_model_diff = (ACE_vr[~ACE_vr_is_nan]).to(u.km / u.s).value - model_eval[~ACE_vr_is_nan]
-    ll = - 0.5 * (1. / sigma_scale) * (np.linalg.norm(data_model_diff, ord=2) ** 2)
-    return ll
+    return - 0.5 * (1. / sigma_scale) * (np.linalg.norm(data_model_diff, ord=2) ** 2)
 
 
 def log_posterior(theta):
@@ -104,6 +102,9 @@ if __name__ == "__main__":
     # initial = np.array([3.16435228e+00, 3.49519082e+02,
     #                     7.23709870e+02, 1.77866287e-01,
     #                     1.14697740e+00, 2.46571473e-02, 6.01763647e-01])
+    l_bounds = np.array([1.5, 200, 550, 0.05, 1, 0.01, 0.06])
+    u_bounds = np.array([4, 400, 950, 0.5, 1.75, 0.4, 0.9])
+    initial = (u_bounds + l_bounds) / 2
     # number of walkers
     n_walkers = 15
     # number of uncertain parameters
@@ -113,7 +114,10 @@ if __name__ == "__main__":
     backend = emcee.backends.HDFBackend(filename)
     # get the previous run last sample.
     # backend_original = emcee.backends.HDFBackend("MCMC_results/CR_total.h5")
-    initial = backend.get_chain(flat=False)[-1, :, :]
+    # initial = backend.get_chain(flat=False)[-1, :, :]
+    initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
+                                                      cov=np.diag(u_bounds - l_bounds) * 1e-2,
+                                                      size=n_walkers)
 
     # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
@@ -129,7 +133,7 @@ if __name__ == "__main__":
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = int(400)
+    max_n = int(4000)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0

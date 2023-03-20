@@ -78,7 +78,7 @@ def log_prior(theta):
         return -np.inf
 
 
-def log_likelihood(theta, sigma_scale=10):
+def log_likelihood(theta, sigma_scale=1):
     """returns the log likelihood for the specific set of parameters theta.
 
     :param theta: list of model parameters.
