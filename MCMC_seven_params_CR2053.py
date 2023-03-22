@@ -98,10 +98,7 @@ def log_posterior(theta):
 
 
 if __name__ == "__main__":
-    # initialization (taken from the notebook)
-    # initial = np.array([3.16435228e+00, 3.49519082e+02,
-    #                     7.23709870e+02, 1.77866287e-01,
-    #                     1.14697740e+00, 2.46571473e-02, 6.01763647e-01])
+    # initialization
     l_bounds = np.array([1.5, 200, 550, 0.05, 1, 0.01, 0.06])
     u_bounds = np.array([4, 400, 950, 0.5, 1.75, 0.4, 0.9])
     initial = (u_bounds + l_bounds) / 2
