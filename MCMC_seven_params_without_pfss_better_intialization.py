@@ -132,11 +132,11 @@ if __name__ == "__main__":
     backend = emcee.backends.HDFBackend(filename)
 
     # after the first run we can uncomment the initialization
-    # initial = backend.get_chain(flat=False)[-1, :, :]
-    initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
-                                                      cov=np.diag(u_bounds - l_bounds) * 1e-3,
-                                                      size=n_walkers)
-    # # If you want to restart from the last sample,
+    initial = backend.get_chain(flat=False)[-1, :, :]
+    # initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
+    #                                                   cov=np.diag(u_bounds - l_bounds) * 1e-3,
+    #                                                   size=n_walkers)
+    # # # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
     # backend.reset(n_walkers, n_dim)
 
