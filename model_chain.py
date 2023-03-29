@@ -165,7 +165,8 @@ def run_chain_of_models(ACE_longitude,
                         sample_id=None,
                         id=0,
                         CR="2053",
-                        folder="B"):
+                        folder="B",
+                        type_of_exp="ensemble"):
     """functionality to run a chain of empirical and reduced-physics models:
 
                                 [PFSS] -----> [WSA] -----> [HUX]
@@ -183,6 +184,7 @@ def run_chain_of_models(ACE_longitude,
     :param coefficients_vec: 11 parameters of PSS, WSA, and HUX.
     :param n_r_pfss: number of radial cells in finite differencing in PFSS.
     :param gong_map: SunPy Map object.
+    :param type_of_exp: "ensemble" or "SA"
     :return: QoI evaluated for a specific CR. (float)
     """
     # convert coefficients to dictionary for readability.
@@ -232,7 +234,8 @@ def run_chain_of_models(ACE_longitude,
                                           ACE_longitude=ACE_longitude)
     # save results.
     if sample_id is not None:
-        new_dir = os.getcwd() + "/SA_results/CR" + str(CR) + "/" + str(folder) + "/simulation_output/" + \
+        # todo: quick change from SA to ensemble
+        new_dir = os.getcwd() + "/"+str(type_of_exp) + "_results/CR" + str(CR) + "/" + str(folder) + "/simulation_output/" + \
                   str(sample_id) + str(id)
         if not os.path.exists(new_dir):
             os.makedirs(new_dir)
