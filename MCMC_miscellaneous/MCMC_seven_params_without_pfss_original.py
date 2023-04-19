@@ -78,7 +78,7 @@ def log_prior(theta):
         return -np.inf
 
 
-def log_likelihood(theta, sigma_scale=200.):
+def log_likelihood(theta, sigma_scale=1.):
     """returns the log likelihood for the specific set of parameters theta.
 
     :param theta: list of model parameters.
@@ -94,7 +94,7 @@ def log_likelihood(theta, sigma_scale=200.):
         # find indexes where the measurements are nan.
         ACE_vr_is_nan = np.isnan(ACE_vr[jj])
         data_model_diff = (ACE_vr[jj][~ACE_vr_is_nan]).to(u.km / u.s).value - model_eval[jj][~ACE_vr_is_nan]
-        ll += - 0.5 * (1. / sigma_scale**2) * (np.linalg.norm(data_model_diff, ord=2) ** 2)
+        ll += - 0.5 * (1. / sigma_scale) * (np.linalg.norm(data_model_diff, ord=2) ** 2)
     return ll
 
 
@@ -128,14 +128,14 @@ if __name__ == "__main__":
     n_dim = len(l_bounds)
 
     # file name to save results
-    filename = "MCMC_results/CR_total_without_pfss_sigma_200.h5"
+    filename = "../MCMC_results/CR_total_without_pfss.h5"
     backend = emcee.backends.HDFBackend(filename)
 
     # after the first run we can uncomment the initialization
-    # initial = backend.get_chain(flat=False)[-1, :, :]
-    initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
-                                                      cov=np.diag(u_bounds - l_bounds) * 1e-2,
-                                                      size=n_walkers)
+    initial = backend.get_chain(flat=False)[-1, :, :]
+    # initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
+    #                                                   cov=np.diag(u_bounds - l_bounds) * 1e-2,
+    #                                                   size=n_walkers)
     # # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
     # backend.reset(n_walkers, n_dim)

@@ -6,13 +6,14 @@ from model_chain import run_chain_of_models_mcmc_without_pfss, get_ace_date
 from sunpy.coordinates.sun import carrington_rotation_time
 import sunpy.map
 import warnings
+import reddemcee
 
 warnings.filterwarnings("ignore")
 import astropy.units as u
 
 # get data
 # exclude 2051 since there were 3 CMEs during this time period.
-list_of_carrington_rotations = [2048, 2049, 2050, 2052, 2053, 2054, 2055, 2056, 2057, 2058]
+list_of_carrington_rotations = [2052]
 num_cr = len(list_of_carrington_rotations)
 ACE_longitude = []
 ACE_latitude = []
@@ -78,7 +79,7 @@ def log_prior(theta):
         return -np.inf
 
 
-def log_likelihood(theta, sigma_scale=1.):
+def log_likelihood(theta, sigma_scale=80.):
     """returns the log likelihood for the specific set of parameters theta.
 
     :param theta: list of model parameters.
@@ -94,7 +95,7 @@ def log_likelihood(theta, sigma_scale=1.):
         # find indexes where the measurements are nan.
         ACE_vr_is_nan = np.isnan(ACE_vr[jj])
         data_model_diff = (ACE_vr[jj][~ACE_vr_is_nan]).to(u.km / u.s).value - model_eval[jj][~ACE_vr_is_nan]
-        ll += - 0.5 * (1. / sigma_scale) * (np.linalg.norm(data_model_diff, ord=2) ** 2)
+        ll += - 0.5 * (1. / sigma_scale**2) * (np.linalg.norm(data_model_diff/10, ord=2) ** 2)
     return ll
 
 
@@ -123,19 +124,19 @@ if __name__ == "__main__":
     # initialize at the center of the parameter space
     initial = (u_bounds + l_bounds) / 2
     # define number of walkers
-    n_walkers = 150
+    n_walkers = 250
     # define number of parameter dimensions
     n_dim = len(l_bounds)
 
     # file name to save results
-    filename = "MCMC_results/CR_total_without_pfss.h5"
+    filename = "MCMC_results/CR_total_without_pfss_sigma_80_cr2052_ds.h5"
     backend = emcee.backends.HDFBackend(filename)
 
     # after the first run we can uncomment the initialization
     initial = backend.get_chain(flat=False)[-1, :, :]
     # initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
-    #                                                   cov=np.diag(u_bounds - l_bounds) * 1e-2,
-    #                                                   size=n_walkers)
+    #                                                  cov=np.diag(u_bounds - l_bounds) * 1e-2,
+    #                                                  size=n_walkers)
     # # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
     # backend.reset(n_walkers, n_dim)
@@ -148,7 +149,7 @@ if __name__ == "__main__":
     # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
     #                                     progress=True, store=True)
     # maximum number of samples
-    max_n = int(5000)
+    max_n = int(15000)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0
