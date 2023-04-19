@@ -129,7 +129,7 @@ if __name__ == "__main__":
     n_dim = len(l_bounds)
 
     # file name to save results
-    filename = "MCMC_results/CR_total_without_pfss_sigma_80_cr2052_ds.h5"
+    filename = "MCMC_results/MCMC_CR2052_T_100.h5"
     backend = emcee.backends.HDFBackend(filename)
 
     # after the first run we can uncomment the initialization

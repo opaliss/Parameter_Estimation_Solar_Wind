@@ -1,7 +1,6 @@
 import numpy as np
 import emcee.backends.backend
 from multiprocessing import Pool
-
 from model_chain import run_chain_of_models_mcmc_without_pfss, get_ace_date
 from sunpy.coordinates.sun import carrington_rotation_time
 import sunpy.map
@@ -128,27 +127,25 @@ if __name__ == "__main__":
     n_dim = len(l_bounds)
 
     # file name to save results
-    filename = "MCMC_results/CR_total_without_pfss_sigma_80_cr2053.h5"
+    filename = "MCMC_results/MCMC_CR2053.h5"
     backend = emcee.backends.HDFBackend(filename)
 
     # after the first run we can uncomment the initialization
-    # initial = backend.get_chain(flat=False)[-1, :, :]
-    initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
-                                                      cov=np.diag(u_bounds - l_bounds) * 1e-2,
-                                                      size=n_walkers)
+    initial = backend.get_chain(flat=False)[-1, :, :]
+    # initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
+    #                                                   cov=np.diag(u_bounds - l_bounds) * 1e-2,
+    #                                                   size=n_walkers)
     # # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
     # backend.reset(n_walkers, n_dim)
 
-    # cpu_count = n_walkers
-    # with Pool(cpu_count) as pool:
+    # set up sampler
     sampler = emcee.EnsembleSampler(nwalkers=n_walkers, ndim=n_dim, log_prob_fn=log_posterior,
                                     backend=backend, moves=emcee.moves.StretchMove(a=2))
     print("Running MCMC...")
-    # pos, prob, state = sampler.run_mcmc(initial_state=p0, nsteps=n_samples,
-    #                                     progress=True, store=True)
+
     # maximum number of samples
-    max_n = int(5000)
+    max_n = int(15000)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0
