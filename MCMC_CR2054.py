@@ -130,10 +130,10 @@ if __name__ == "__main__":
     backend = emcee.backends.HDFBackend(filename)
 
     # after the first run we can uncomment the initialization
-    # initial = backend.get_chain(flat=False)[-1, :, :]
-    initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
-                                                      cov=np.diag(u_bounds - l_bounds) * 1e-2,
-                                                      size=n_walkers)
+    initial = backend.get_chain(flat=False)[-1, :, :]
+    # initial = initial + np.random.multivariate_normal(mean=np.zeros(n_dim),
+    #                                                  cov=np.diag(u_bounds - l_bounds) * 1e-2,
+    #                                                  size=n_walkers)
     # # If you want to restart from the last sample,
     # you can just leave out the call to backends.HDFBackend.reset():
     # backend.reset(n_walkers, n_dim)
@@ -143,7 +143,7 @@ if __name__ == "__main__":
                                     backend=backend, moves=emcee.moves.StretchMove(a=2))
     print("Running MCMC...")
     # maximum number of samples
-    max_n = int(15000)
+    max_n = int(6000)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0

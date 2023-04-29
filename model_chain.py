@@ -235,7 +235,7 @@ def run_chain_of_models(ACE_longitude,
     # save results.
     if sample_id is not None:
         # todo: quick change from SA to ensemble
-        new_dir = os.getcwd() + "/"+str(type_of_exp) + "_results/CR" + str(CR) + "/" + str(folder) + "/simulation_output/" + \
+        new_dir = os.getcwd() + "/" +str(type_of_exp) + "_results/CR" + str(CR) + "/" + str(folder) + "/simulation_output/" + \
                   str(sample_id) + str(id)
         if not os.path.exists(new_dir):
             os.makedirs(new_dir)
@@ -342,7 +342,9 @@ def run_chain_of_models_mcmc_without_pfss(ACE_longitude,
                                          ACE_r,
                                          coefficients_vec,
                                          cr,
-                                         n_r_hux=300):
+                                         n_r_hux=300,
+                                         dir_name=None,
+                                         ii=0):
     """functionality to run a chain of empirical and reduced-physics models:
 
                                 [WSA] -----> [HUX]
@@ -385,6 +387,13 @@ def run_chain_of_models_mcmc_without_pfss(ACE_longitude,
                                           vr_hux=vr_hux_wsa,
                                           ACE_r=ACE_r,
                                           ACE_longitude=ACE_longitude)
+
+    # save the results for ensemble forecasting
+    if dir_name is not None:
+        if not os.path.exists(dir_name):
+            os.makedirs(dir_name)
+        np.save(file=dir_name + "/ensemble" + str(ii), arr=vr_hux_wsa_interp)
+
     return vr_hux_wsa_interp
 
 
