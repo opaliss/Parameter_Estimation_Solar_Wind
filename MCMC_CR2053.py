@@ -145,7 +145,7 @@ if __name__ == "__main__":
     print("Running MCMC...")
 
     # maximum number of samples
-    max_n = int(15000)
+    max_n = int(1000)
 
     # we will track how the average autocorrelation time estimate changes
     index = 0

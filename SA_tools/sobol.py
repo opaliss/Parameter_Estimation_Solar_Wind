@@ -1,3 +1,7 @@
+"""Estimating Sobol' sensitivity indicies using Monte Carlo Methods
+Author: [Opal Issan] oissan@ucsd.edu
+Last Modified: May 2nd, 2023
+"""
 import numpy as np
 import copy
 
@@ -111,15 +115,10 @@ def estimator_main_effect(YA, YB, YC, N, A,  type_estimator):
         Michiel J.W. Jansen. Analysis of variance designs for model output. 
         Computer Physics Communications, 117(1):35–43, 1999. ISSN 0010-4655.
         """
-        #
-        # ((2 * N) / (2 * N - 1) * (1 / N * YA.T @ YC -
-        #                              ((np.mean(YA) + np.mean(YB)) / 2) ** 2 +
-        #                              (np.var(YA) + np.var(YB)) / (4 * N))) / np.var(YA, ddof=1)
         S = np.zeros(np.shape(YC)[1])
         for ii in range(np.shape(YC)[1]):
             S[ii] = 1 - (1 / (2 * N) * np.sum((YA - YC[:, ii]) ** 2)) / np.var(np.r_[YA, YB], ddof=1)
         return S
-
 
     elif type_estimator == "sobol":
         """
