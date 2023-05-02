@@ -1,6 +1,6 @@
 import numpy as np
 import astropy.units as u
-from tools.interpolate import interpolate_ace_data, interp_2d_ace_hux
+from ACE_tools.interpolate import interpolate_ace_data, interp_2d_ace_hux
 from sunpy.coordinates import frames
 from astropy.coordinates import SkyCoord
 from heliopy.data import ace
