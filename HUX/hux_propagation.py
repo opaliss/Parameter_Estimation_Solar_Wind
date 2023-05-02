@@ -1,4 +1,7 @@
-"""HUX-f and HUX-b propagation implemented. """
+"""HUX-f and HUX-b propagation implemented.
+Author: [Opal Issan] oissan@ucsd.edu
+Last Modified: May 2nd, 2023
+"""
 import numpy as np
 import astropy.units as u
 

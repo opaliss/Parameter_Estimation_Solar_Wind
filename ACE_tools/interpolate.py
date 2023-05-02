@@ -1,6 +1,6 @@
 """Module contains functions to interpolate 2d initial condition at 30Rs.
 
-Authors: Opal Issan
+Authors: [Opal Issan] oissan@ucsd.edu
 Version: August 21, 2022
 """
 from scipy.interpolate import RegularGridInterpolator, interp2d
