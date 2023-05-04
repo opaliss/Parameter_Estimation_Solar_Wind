@@ -1,6 +1,6 @@
-# Global Sensitivity Analysis and Bayesian Inference of the Ambient Solar Wind via an Operational Model Chain
+# Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts
 
-Global Sensitivity Analysis and parameter estimation of the parameters in PFSS => WSA => HUX model chain using ACE measurement velocity data. 
+Issan O, Reily P, Camporeale E, Kramer B (2023) *Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts*. Arxiv (preprint). doi: tbd.
 
 # Dependencies
 1. Python >= 3.9.13
