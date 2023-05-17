@@ -1,6 +1,6 @@
 # Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts
 
-Issan O, Riley P, Camporeale E, Kramer B (2023) *Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts*. Arxiv (preprint). doi: tbd.
+[Issan O, Riley P, Camporeale E, Kramer B (2023) *Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts*. Arxiv. doi: arXiv:2305.08009.](https://arxiv.org/abs/2305.08009)
 
 # Dependencies
 1. Python >= 3.9.13
