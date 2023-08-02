@@ -23,13 +23,13 @@
 ## Data
 1. GONG CR Synoptic Maps: available online at https://gong.nso.edu/data/magmap/crmap.html.
 2. ACE Measurement data: available online at https://spdf.gsfc.nasa.gov/.
-* *Note*: Both data products are directly downloaded in the code using the *heliopy* package.
+* *Note*: Both data products are directly imported in the code using the [*heliopy*](https://heliopy.readthedocs.io/en/0.15.3/) package.
 
 ## Code Structure
 ### Main 
-**model_chain.py** - module to run the model chain *PFSS $\to$ WSA $\to$ HUX*. 
-**SA_tools/sobol.py** - module to compute Sobol' sensitivity indices via various Monte Carlo estimators. 
-**SA_tools/pfss_wsa_hux_samples.py** - module to sample the model parameter space via Latin Hypercube sampling (a quasi-Monte Carlo method). 
+**model_chain.py** - module to run the model chain PFSS $\to$ WSA $\to$ HUX. \\
+**SA_tools/sobol.py** - module to compute Sobol' sensitivity indices via various Monte Carlo estimators. \\
+**SA_tools/pfss_wsa_hux_samples.py** - module to sample the model parameter space via Latin Hypercube sampling (a quasi-Monte Carlo method). \\
 **MCMC_simulation** - folder containing various modules to run the Markov Chain Monte Carlo [affine invariant ensemble sampler](https://emcee.readthedocs.io/en/stable/) to learn the posterior distribution of the five most influential parameters in the model chain. 
 
 ### Analysis 
