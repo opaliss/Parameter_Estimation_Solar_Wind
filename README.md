@@ -2,6 +2,9 @@
 
 [Issan O, Riley P, Camporeale E, Kramer B (2023) *Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Prediction*. Arxiv. doi: arXiv:2305.08009.](https://arxiv.org/abs/2305.08009)
 
+## Abstract 
+The ambient solar wind plays a significant role in propagating interplanetary coronal mass ejections and is an important driver of space weather geomagnetic storms. A computationally efficient and widely used method to predict the ambient solar wind radial velocity near Earth involves coupling three models: Potential Field Source Surface, Wang-Sheeley-Arge (WSA), and Heliospheric Upwind eXtrapolation. However, the model chain has eleven uncertain parameters that are mainly non-physical due to empirical relations and simplified physics assumptions. We, therefore, propose a comprehensive uncertainty quantification (UQ) framework that is able to successfully quantify and reduce parametric uncertainties in the model chain. The UQ framework utilizes variance-based global sensitivity analysis followed by Bayesian inference via Markov chain Monte Carlo to learn the posterior densities of the most influential parameters. The sensitivity analysis results indicate that the five most influential parameters are all WSA parameters. Additionally, we show that the posterior densities of such influential parameters vary greatly from one Carrington rotation to the next. The influential parameters are trying to overcompensate for the missing physics in the model chain, highlighting the need to enhance the robustness of the model chain to the choice of WSA parameters. The ensemble predictions generated from the learned posterior densities significantly reduce the uncertainty in solar wind velocity predictions near Earth.
+
 ## Python Dependencies
 1. Python >= 3.9.13
 2. numpy >= 1.23.3
@@ -26,14 +29,16 @@
 * *Note*: Both data products are directly imported in the code using the [*heliopy*](https://heliopy.readthedocs.io/en/0.15.3/) package.
 
 ## Code Structure
-### Main 
-**model_chain.py** - module to run the model chain PFSS $\to$ WSA $\to$ HUX. \\
-**SA_tools/sobol.py** - module to compute Sobol' sensitivity indices via various Monte Carlo estimators. \\
-**SA_tools/pfss_wsa_hux_samples.py** - module to sample the model parameter space via Latin Hypercube sampling (a quasi-Monte Carlo method). \\
-**MCMC_simulation** - folder containing various modules to run the Markov Chain Monte Carlo [affine invariant ensemble sampler](https://emcee.readthedocs.io/en/stable/) to learn the posterior distribution of the five most influential parameters in the model chain. 
+### Main tools
+1. **model_chain.py** - module to run the model chain PFSS $\to$ WSA $\to$ HUX.  
+2. **SA_tools/sobol.py** - module to compute Sobol' sensitivity indices via various MC estimators, e.g. Saltelli, Janon, and Jansen estimators.
+3. **SA_tools/pfss_wsa_hux_samples.py** - module to sample the model chain parameter space via Latin Hypercube sampling (a quasi-MC method). 
+4. **MCMC_simulation** - folder containing various modules (or different CRs) to run the MCMC [affine invariant ensemble sampler](https://emcee.readthedocs.io/en/stable/) i.e. emcee, to learn the posterior distribution of the five most influential parameters in the model chain. 
 
-### Analysis 
-
+### Analysis notebooks
+1. **model_chain_results** - folder containing Jupyter notebooks analyzing the model chain results for various CRs 
+2. 
+### Miscellaneous
 
 
 ## Correspondence
