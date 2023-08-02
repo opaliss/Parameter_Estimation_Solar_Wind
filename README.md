@@ -2,7 +2,7 @@
 
 [Issan O, Riley P, Camporeale E, Kramer B (2023) *Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts*. Arxiv. doi: arXiv:2305.08009.](https://arxiv.org/abs/2305.08009)
 
-# Dependencies
+# Python Dependencies
 1. Python >= 3.9.13
 2. numpy >= 1.23.3
 3. matplotlib >= 3.6.0
@@ -23,10 +23,13 @@
 # Data
 1. GONG CR Synoptic Maps: available online at https://gong.nso.edu/data/magmap/crmap.html.
 2. ACE Measurement data: available online at https://spdf.gsfc.nasa.gov/.
+* Both data products are directly downloaded using *heliopy* package. 
 
 # Correspondence
 Opal Issan (PhD student), University of California, San Diego. oissan@ucsd.edu
 
 # License
 MIT
+
+# Code Structure 
 
