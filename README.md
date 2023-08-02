@@ -1,8 +1,8 @@
-# Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts
+## Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Prediction
 
-[Issan O, Riley P, Camporeale E, Kramer B (2023) *Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Forecasts*. Arxiv. doi: arXiv:2305.08009.](https://arxiv.org/abs/2305.08009)
+[Issan O, Riley P, Camporeale E, Kramer B (2023) *Bayesian Inference and Global Sensitivity Analysis for Ambient Solar Wind Prediction*. Arxiv. doi: arXiv:2305.08009.](https://arxiv.org/abs/2305.08009)
 
-# Python Dependencies
+## Python Dependencies
 1. Python >= 3.9.13
 2. numpy >= 1.23.3
 3. matplotlib >= 3.6.0
@@ -20,16 +20,19 @@
 15. requests >= 2.28.1
 16. emcee >= 3.1.4
 
-# Data
+## Data
 1. GONG CR Synoptic Maps: available online at https://gong.nso.edu/data/magmap/crmap.html.
 2. ACE Measurement data: available online at https://spdf.gsfc.nasa.gov/.
-* Both data products are directly downloaded using *heliopy* package. 
+* Both data products are directly downloaded using *heliopy* package.
 
-# Correspondence
+## Code Structure
+**model_chain.py** - module to run the model chain *PFSS \to WSA \to HUX*. 
+**
+
+## Correspondence
 Opal Issan (PhD student), University of California, San Diego. oissan@ucsd.edu
 
-# License
+## License
 MIT
-
-# Code Structure 
+ 
 
