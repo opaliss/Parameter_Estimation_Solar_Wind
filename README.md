@@ -26,7 +26,7 @@
 * Both data products are directly downloaded using *heliopy* package.
 
 ## Code Structure
-**model_chain.py** - module to run the model chain *PFSS \to WSA \to HUX*. 
+**model_chain.py** - module to run the model chain *PFSS $\to$ WSA $\to$ HUX*. 
 **
 
 ## Correspondence
