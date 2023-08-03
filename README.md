@@ -31,7 +31,7 @@ The ambient solar wind plays a significant role in propagating interplanetary co
 ## Code Structure
 The code roadmap to execute sensitivity analysis $\to$ MCMC $\to$ ensemble forecasting:
 
-**SA_evaluate_samples** $\to$ **SA_analysis** $\to$ **MCMC_simulation** $\to$ **MCMC_analysis** $\to$ ensemble_run**
+**SA_evaluate_samples** $\to$ **SA_analysis** $\to$ **MCMC_simulation** $\to$ **MCMC_analysis** $\to$ ensemble_simulation**
 
 ### Main tools
 1. **model_chain.py** - module to run the model chain PFSS $\to$ WSA $\to$ HUX.  
