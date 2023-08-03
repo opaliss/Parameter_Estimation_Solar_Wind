@@ -47,7 +47,6 @@ The code roadmap to run the UQ framework: sensitivity analysis $\to$ MCMC $\to$ 
 3. **MCMC_analysis** - folder containing Jupyter notebooks analyzing the MCMC posterior samples, MCMC convergence, and other heuristics.
 4. **ensemble_simulation** - folder containing Jupyter notebooks to generate an ensemble forecast using MCMC posterior samples. 
 
-
 ## Correspondence
 [Opal Issan](https://opaliss.github.io/opalissan/) (Ph.D. student), University of California San Diego. email: oissan@ucsd.edu
 
