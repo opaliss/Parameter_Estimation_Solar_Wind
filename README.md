@@ -35,14 +35,17 @@ The code roadmap to execute sensitivity analysis $\to$ MCMC $\to$ ensemble forec
 
 ### Main tools
 1. **model_chain.py** - module to run the model chain PFSS $\to$ WSA $\to$ HUX.  
-2. **SA_tools/sobol.py** - module to compute Sobol' sensitivity indices via various MC estimators, e.g. Saltelli, Janon, and Jansen estimators.
-3. **SA_tools/pfss_wsa_hux_samples.py** - module to sample the model chain parameter space via Latin Hypercube sampling (a quasi-MC method). 
-4. **MCMC_simulation** - folder containing various modules (or different CRs) to run the MCMC [affine invariant ensemble sampler](https://emcee.readthedocs.io/en/stable/) i.e. emcee, to learn the posterior distribution of the five most influential parameters in the model chain. 
+2. **HUX/hux_propagation.py** - module to run the HUX model. 
+3. **ACE_tools/interpolate.py** - module to interpolate velocity field results at ACE's trajectory. 
+4. **SA_tools/sobol.py** - module to compute Sobol' sensitivity indices via various MC estimators, e.g. Saltelli, Janon, and Jansen estimators.
+5. **SA_tools/generate_samples.py** - module to sample the model chain parameter space via Latin Hypercube sampling (a quasi-MC method). 
+6. **MCMC_simulation** - folder containing various modules (or different CRs) to run the MCMC [affine invariant ensemble sampler](https://emcee.readthedocs.io/en/stable/) i.e. emcee, to learn the posterior distribution of the five most influential parameters in the model chain. 
+7. **ensemble_simulation** - folder containing Jupyter notebooks to generate an ensemble forecast using MCMC posterior samples. 
 
 ### Analysis notebooks
 1. **model_chain_results** - folder containing Jupyter notebooks analyzing the model chain results for various CRs 
-2. 
-### Miscellaneous
+2. **SA_analysis** - folder containing Jupyter notebooks analyzing the first-order and total-order Sobol' sensitivity indices for various time periods. 
+3. **MCMC_analysis** - folder containing Jupyter notebooks analyzing the MCMC posterior samples, MCMC convergence, and other heuristics.
 
 
 ## Correspondence
