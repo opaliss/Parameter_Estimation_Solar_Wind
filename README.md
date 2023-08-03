@@ -25,7 +25,7 @@ The ambient solar wind plays a significant role in propagating interplanetary co
 
 ## Data
 1. GONG CR Synoptic Maps: available online at https://gong.nso.edu/data/magmap/crmap.html.
-2. ACE Measurement data: available online at https://spdf.gsfc.nasa.gov/.
+2. ACE *in-situ* Measurements: available online at https://spdf.gsfc.nasa.gov/.
 * *Note*: ACE *in-situ* messurements are directly imported in the code using the [*heliopy*](https://heliopy.readthedocs.io/en/0.15.3/) package and the GONG synoptic maps for CR2048-CR2058 are saved in the folder **GONG**.
 
 ## Code Structure
