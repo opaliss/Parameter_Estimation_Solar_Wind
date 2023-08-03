@@ -29,6 +29,10 @@ The ambient solar wind plays a significant role in propagating interplanetary co
 * *Note*: ACE *in-situ* messurements are directly imported in the code using the [*heliopy*](https://heliopy.readthedocs.io/en/0.15.3/) package and the GONG synoptic maps for CR2048-CR2058 are saved in the folder **GONG**.
 
 ## Code Structure
+The code roadmap to execute sensitivity analysis $\to$ MCMC $\to$ ensemble forecasting:
+
+**SA_evaluate_samples** $\to$ **SA_analysis** $\to$ **MCMC_simulation** $\to$ **MCMC_analysis** $\to$ ensemble_run**
+
 ### Main tools
 1. **model_chain.py** - module to run the model chain PFSS $\to$ WSA $\to$ HUX.  
 2. **SA_tools/sobol.py** - module to compute Sobol' sensitivity indices via various MC estimators, e.g. Saltelli, Janon, and Jansen estimators.
